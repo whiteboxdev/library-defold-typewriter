@@ -1,0 +1,11 @@
+function init(self)
+	msg.post(msg.url(), hash("acquire_input_focus"))
+end
+
+function on_input(self, action_id, action)
+	if action.pressed then
+		if action_id == hash("key_esc") then
+			sys.exit(0)
+		end
+	end
+end
