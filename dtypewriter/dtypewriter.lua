@@ -114,8 +114,6 @@ local function type_callback()
 		end
 	else
 		msg.post(_messages_url, dtypewriter.messages.complete)
-		_character_index = nil
-		_paragraph_index = nil
 	end
 end
 
@@ -295,12 +293,24 @@ function dtypewriter.set_speed(speed)
 	_speed = math.min(_speed_max, math.max(0, speed))
 end
 
+function dtypewriter.is_clear()
+	return not _character_index and #_characters == 0
+end
+
+function dtypewriter.is_loaded()
+	return not _character_index and #_characters > 0
+end
+
 function dtypewriter.is_typing()
-	return _character_index and true or false
+	return _character_index < #_characters
 end
 
 function dtypewriter.is_waiting()
 	return _waiting
+end
+
+function dtypewriter.is_complete()
+	return _character_index == #_characters + 1
 end
 
 return dtypewriter
