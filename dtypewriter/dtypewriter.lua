@@ -55,8 +55,9 @@ local _waiting = false
 local _colors = {}
 local _default_color = vmath.vector4()
 
-local _max_speed = 120
-local _default_speed = 45
+local _fade_delay = 0
+
+local _default_type_speed = 30
 
 local _messages_url
 
@@ -103,7 +104,11 @@ local function type_callback()
 	msg.post(_messages_url, dtypewriter.messages.type)
 	::instant::
 	local character_data = _characters[_character_index]
-	gui.set_color(character_data.node, character_data.color)
+	if _fade_delay > 0 then
+		gui.animate(character_data.node, "color.w", 1, gui.EASING_LINEAR, _fade_delay)
+	else
+		gui.set_color(character_data.node, character_data.color)
+	end
 	_character_index = _character_index + 1
 	local next_character_data = _characters[_character_index]
 	if next_character_data then
@@ -155,7 +160,7 @@ function dtypewriter.load(text)
 	local chunk_start_index = 1
 	local character_index = 1
 	local character_color = _default_color
-	local character_speed = _default_speed
+	local character_speed = _default_type_speed
 	while character_index <= #text do
 		local character = string.sub(text, character_index, character_index)
 		if character == " " then
@@ -180,7 +185,7 @@ function dtypewriter.load(text)
 				local speed_start_index, speed_end_index = string.find(text, "%d*%l*", character_index + 7)
 				local speed_text = string.sub(text, speed_start_index, speed_end_index)
 				if speed_text == "default" then
-					character_speed = _default_speed
+					character_speed = _default_type_speed
 				elseif speed_text == "instant" then
 					character_speed = 0
 				else
@@ -222,6 +227,7 @@ function dtypewriter.load(text)
 	local line = 1
 	local line_width_remaining = _text_area_width
 	local character_x = _text_area_x
+	local invalid_chunk_indices = {}
 	for chunk_index, chunk in ipairs(_chunks) do
 		if chunk.type == "paragraph" then
 			line = 1
@@ -237,6 +243,7 @@ function dtypewriter.load(text)
 			end
 			character_x = _text_area_x
 			if chunk.type == "space" then
+				invalid_chunk_indices[chunk_index] = true
 				goto continue
 			end
 		end
@@ -259,6 +266,11 @@ function dtypewriter.load(text)
 			end
 		end
 		::continue::
+	end
+	for character_index = #_characters, 1, -1 do
+		if invalid_chunk_indices[_characters[character_index].chunk_index] then
+			table.remove(_characters, character_index)
+		end
 	end
 end
 
@@ -298,8 +310,12 @@ function dtypewriter.clear_colors()
 	_colors = {}
 end
 
-function dtypewriter.set_default_speed(speed)
-	_default_speed = speed
+function dtypewriter.set_fade_delay(delay)
+	_fade_delay = delay
+end
+
+function dtypewriter.set_default_type_speed(speed)
+	_default_type_speed = speed
 end
 
 function dtypewriter.is_clear()
