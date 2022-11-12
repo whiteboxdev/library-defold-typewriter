@@ -55,8 +55,8 @@ local _waiting = false
 local _colors = {}
 local _default_color = vmath.vector4()
 
-local _speed_max = 120
-local _speed = 30
+local _max_speed = 120
+local _default_speed = 45
 
 local _messages_url
 
@@ -85,8 +85,8 @@ local function strip_spaces(text)
 	return remove_line_spaces
 end
 
-local function add_chunk(type, text)
-	local chunk = { type = type, text = text }
+local function add_chunk(type, data)
+	local chunk = { type = type, data = data or {} }
 	_chunks[#_chunks + 1] = chunk
 end
 
@@ -101,6 +101,7 @@ end
 
 local function type_callback()
 	msg.post(_messages_url, dtypewriter.messages.type)
+	::instant::
 	local character_data = _characters[_character_index]
 	gui.set_color(character_data.node, character_data.color)
 	_character_index = _character_index + 1
@@ -109,6 +110,8 @@ local function type_callback()
 		if character_data.paragraph < next_character_data.paragraph then
 			msg.post(_messages_url, dtypewriter.messages.wait)
 			_waiting = true
+		elseif next_character_data.speed == 0 then
+			goto instant
 		else
 			timer.delay(1 / next_character_data.speed, false, type_callback)
 		end
@@ -152,17 +155,19 @@ function dtypewriter.load(text)
 	local chunk_start_index = 1
 	local character_index = 1
 	local character_color = _default_color
-	local character_speed = _speed
+	local character_speed = _default_speed
 	while character_index <= #text do
 		local character = string.sub(text, character_index, character_index)
 		if character == " " then
 			local chunk_type = "content"
 			local chunk_text = string.sub(text, chunk_start_index, character_index - 1)
-			add_chunk(chunk_type, chunk_text)
-			chunk_text = " "
+			local chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
+			add_chunk(chunk_type, chunk_data)
 			chunk_type = "space"
-			add_chunk(chunk_type, chunk_text)
-			add_character(#_chunks, " ", character_color, character_speed)
+			chunk_text = " "
+			chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
+			add_chunk(chunk_type, chunk_data)
+			add_character(#_chunks, chunk_text, character_color, character_speed)
 			chunk_start_index = character_index + 1
 			character_index = character_index + 1
 		elseif character == "<" then
@@ -174,12 +179,19 @@ function dtypewriter.load(text)
 			elseif string.sub(text, character_index, character_index + 6) == "<speed=" then
 				local speed_start_index, speed_end_index = string.find(text, "%d*%l*", character_index + 7)
 				local speed_text = string.sub(text, speed_start_index, speed_end_index)
-				character_speed = speed_text == "default" and _speed or math.min(_speed_max, math.max(0, speed_text))
+				if speed_text == "default" then
+					character_speed = _default_speed
+				elseif speed_text == "instant" then
+					character_speed = 0
+				else
+					character_speed = speed_text
+				end
 				text = string.sub(text, 1, character_index - 1) .. string.sub(text, speed_end_index + 2)
 			elseif string.sub(text, character_index, character_index + 5) == "<line>" then
 				local chunk_type = "content"
 				local chunk_text = string.sub(text, chunk_start_index, character_index - 1)
-				add_chunk(chunk_type, chunk_text)
+				local chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
+				add_chunk(chunk_type, chunk_data)
 				chunk_type = "line"
 				add_chunk(chunk_type)
 				chunk_start_index = character_index + 6
@@ -187,7 +199,8 @@ function dtypewriter.load(text)
 			elseif string.sub(text, character_index, character_index + 10) == "<paragraph>" then
 				local chunk_type = "content"
 				local chunk_text = string.sub(text, chunk_start_index, character_index - 1)
-				add_chunk(chunk_type, chunk_text)
+				local chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
+				add_chunk(chunk_type, chunk_data)
 				chunk_type = "paragraph"
 				add_chunk(chunk_type)
 				chunk_start_index = character_index + 11
@@ -198,7 +211,8 @@ function dtypewriter.load(text)
 			if character_index == #text then
 				local chunk_type = "content"
 				local chunk_text = string.sub(text, chunk_start_index, character_index)
-				add_chunk(chunk_type, chunk_text)
+				local chunk_data = { text = chunk_text, metrics = resource.get_text_metrics(_font, chunk_text) }
+				add_chunk(chunk_type, chunk_data)
 			end
 			character_index = character_index + 1
 		end
@@ -209,8 +223,12 @@ function dtypewriter.load(text)
 	local line_width_remaining = _text_area_width
 	local character_x = _text_area_x
 	for chunk_index, chunk in ipairs(_chunks) do
-		local chunk_metrics = resource.get_text_metrics(_font, chunk.text or "")
-		if line_width_remaining - chunk_metrics.width < 0 or chunk.type == "line" then
+		if chunk.type == "paragraph" then
+			line = 1
+			line_width_remaining = _text_area_width
+			paragraph = paragraph + 1
+			character_x = _text_area_x
+		elseif chunk.type == "line" or (chunk.data.text and line_width_remaining - chunk.data.metrics.width < 0) then
 			line = line + 1
 			line_width_remaining = _text_area_width
 			if line > _line_count_max then
@@ -221,13 +239,8 @@ function dtypewriter.load(text)
 			if chunk.type == "space" then
 				goto continue
 			end
-		elseif chunk.type == "paragraph" then
-			line = 1
-			line_width_remaining = _text_area_width
-			paragraph = paragraph + 1
-			character_x = _text_area_x
 		end
-		if chunk.text then
+		if chunk.data.text then
 			for _, character_data in ipairs(_characters) do
 				if character_data.chunk_index == chunk_index then
 					local character_metrics = resource.get_text_metrics(_font, character_data.text)
@@ -254,11 +267,7 @@ function dtypewriter.start()
 		msg.post(_messages_url, dtypewriter.messages.start)
 		_character_index = 1
 		_paragraph_index = 1
-		if _speed == 0 then
-			
-		else
-			timer.delay(1 / _speed, false, type_callback)
-		end
+		timer.delay(0, false, type_callback)
 	end
 end
 
@@ -273,11 +282,11 @@ function dtypewriter.continue()
 			gui.set_color(character_data.node, set_transparent(character_data.color))
 			character_index = character_index + 1
 		end
-		timer.delay(1 / _speed, false, type_callback)
+		timer.delay(0, false, type_callback)
 	end
 end
 
-function dtypewriter.set_color(name, color)
+function dtypewriter.add_color(name, color)
 	_colors[name] = color
 end
 
@@ -289,8 +298,8 @@ function dtypewriter.clear_colors()
 	_colors = {}
 end
 
-function dtypewriter.set_speed(speed)
-	_speed = math.min(_speed_max, math.max(0, speed))
+function dtypewriter.set_default_speed(speed)
+	_default_speed = speed
 end
 
 function dtypewriter.is_clear()
