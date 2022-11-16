@@ -23,7 +23,7 @@ Import the dtypewriter module into your gui script like so:
 local dtypewriter = require "dtypewriter.dtypewriter"
 ```
 
-Initialize dtypewriter with `dtypewriter.init()`. This function requires several metrics to properly align text content inside a textbox. THe following image outlines what each parameters refers to:
+Initialize dtypewriter with `dtypewriter.init()`. This function requires several metrics to properly align text content inside a textbox. The following image outlines what each parameter refers to:
 
 ![alt text](https://github.com/klaytonkowalski/library-defold-typewriter/blob/main/assets/metrics.png?raw=true)
 
@@ -38,12 +38,12 @@ The more interesting parameters are outlined here:
 
 Text input must be parsed and loaded with `dtypewriter.load()` before being displayed with `dtypewriter.start()`. Text input should be formatted similarly to HTML elements. The following describes all element names and supported values:
 
-| Name      | Description                                            | Values                   | Examples                       |
-|-----------|--------------------------------------------------------|--------------------------|--------------------------------|
-| line      | Wrap to next line.                                     | N/A                      | \<line>                         |
-| paragraph | Stop typing and wait, then move to next paragraph.     | N/A                      | \<paragraph>                    |
-| color     | Set color of next characters.                          | default, string          | \<color=default>, \<color=green> |
-| speed     | Set speed of next characters in characters per second. | default, positive number | \<speed=default>, \<speed=30>    |
+| Name      | Description                                            | Values                                | Examples                                           |
+|-----------|--------------------------------------------------------|---------------------------------------|----------------------------------------------------|
+| line      | Wrap to next line.                                     | N/A                                   | \<line>                                            |
+| paragraph | Stop typing and wait, then move onto next paragraph.   | N/A                                   | \<paragraph>                                       |
+| color     | Set color of next characters.                          | "default", string                     | \<color=default>, \<color=green>                   |
+| speed     | Set speed of next characters in characters per second. | "default", "instant", positive number | \<speed=default>, \<speed=instant>, \<speed=30>    |
 
 The [example gif](https://giphy.com/gifs/defold-0KrcP9rAA5DOlsgf1J) was created by passing the following string into `dtypewriter.load()`:
 
