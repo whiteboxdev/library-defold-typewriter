@@ -2,8 +2,7 @@
 
 Defold Typewriter provides text scrolling and styling in a Defold game engine project.
 
-An [example project](https://github.com/klaytonkowalski/library-defold-typewriter/tree/main/example) is available if you need additional help with configuration.  
-Visit my [Giphy](https://giphy.com/gifs/defold-0KrcP9rAA5DOlsgf1J) to see an animated gif of the example project.
+Visit my [Giphy](https://giphy.com/gifs/defold-0KrcP9rAA5DOlsgf1J) to see an animated gif of this extension working in a larger project.
 
 Please click the "Star" button on GitHub if you find this asset to be useful!
 
