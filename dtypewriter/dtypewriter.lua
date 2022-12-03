@@ -61,6 +61,8 @@ local _default_type_speed = 30
 
 local _messages_url
 
+local _callback_handle
+
 ----------------------------------------------------------------------
 -- CONSTANTS
 ----------------------------------------------------------------------
@@ -118,10 +120,11 @@ local function type_callback()
 		elseif next_character_data.speed == 0 then
 			goto instant
 		else
-			timer.delay(1 / next_character_data.speed, false, type_callback)
+			_callback_handle = timer.delay(1 / next_character_data.speed, false, type_callback)
 		end
 	else
 		msg.post(_messages_url, dtypewriter.messages.complete)
+		_callback_handle = nil
 	end
 end
 
@@ -152,6 +155,10 @@ function dtypewriter.clear()
 	_character_index = nil
 	_paragraph_index = nil
 	_waiting = false
+	if _callback_handle then
+		timer.cancel(_callback_handle)
+		_callback_handle = nil
+	end
 end
 
 function dtypewriter.load(text)
@@ -279,7 +286,7 @@ function dtypewriter.start()
 		msg.post(_messages_url, dtypewriter.messages.start)
 		_character_index = 1
 		_paragraph_index = 1
-		timer.delay(0, false, type_callback)
+		_callback_handle = timer.delay(0, false, type_callback)
 	end
 end
 
@@ -294,7 +301,7 @@ function dtypewriter.continue()
 			gui.set_color(character_data.node, set_transparent(character_data.color))
 			character_index = character_index + 1
 		end
-		timer.delay(0, false, type_callback)
+		_callback_handle = timer.delay(0, false, type_callback)
 	end
 end
 
