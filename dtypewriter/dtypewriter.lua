@@ -73,7 +73,8 @@ dtypewriter.messages =
 	type = hash("type"),
 	wait = hash("wait"),
 	continue = hash("continue"),
-	complete = hash("complete")
+	complete = hash("complete"),
+	clear = hash("clear")
 }
 
 ----------------------------------------------------------------------
@@ -133,7 +134,6 @@ end
 ----------------------------------------------------------------------
 
 function dtypewriter.init(container_node_id, font_id, text_area_x, text_area_y, text_area_width, line_count_max, line_offset, messages_url)
-	dtypewriter.clear()
 	_container_node = gui.get_node(container_node_id)
 	_font_id = font_id
 	_font = gui.get_font_resource(font_id)
@@ -146,6 +146,7 @@ function dtypewriter.init(container_node_id, font_id, text_area_x, text_area_y, 
 end
 
 function dtypewriter.clear()
+	msg.post(_messages_url, dtypewriter.messages.clear)
 	_text_raw = nil
 	_chunks = {}
 	for _, character_data in ipairs(_characters) do
