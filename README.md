@@ -71,7 +71,8 @@ dtypewriter.messages =
     type = hash("type"),
     wait = hash("wait"),
     continue = hash("continue"),
-    complete = hash("complete")
+    complete = hash("complete"),
+    clear = hash("clear")
 }
 ```
 
@@ -80,12 +81,13 @@ dtypewriter.messages =
 3. `wait`: No more characters can be typed within the boundaries of the textbox and a new paragraph must be started.
 4. `continue`: A new paragraph is started.
 5. `complete`: Loaded text is done being typed.
+6. `clear`: Text is unloaded and resources are freed.
 
 ## API: Functions
 
 ### dtypewriter.init(container_node_id, font_id, text_area_x, text_area_y, text_area_width, line_count_max, line_offset, messages_url)
 
-Initialize dtypewriter.
+Initialize dtypewriter. If dtypewriter was already initialized, call `dtypewriter.clear()` before reinitializing.
 
 #### Parameters
 
