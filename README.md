@@ -68,6 +68,7 @@ Table of messages that are passed to the `on_message()` function of your gui scr
 dtypewriter.messages =
 {
     start = hash("start"),
+    restart = hash("restart"),
     type = hash("type"),
     wait = hash("wait"),
     continue = hash("continue"),
@@ -77,11 +78,12 @@ dtypewriter.messages =
 ```
 
 1. `start`: Loaded text is starting to be typed.
-2. `type`: An individual character is typed.
-3. `wait`: No more characters can be typed within the boundaries of the textbox and a new paragraph must be started.
-4. `continue`: A new paragraph is started.
-5. `complete`: Loaded text is done being typed.
-6. `clear`: Text is unloaded and resources are freed.
+2. `restart`: Typing is restarted from the beginning.
+3. `type`: An individual character is typed.
+4. `wait`: No more characters can be typed within the boundaries of the textbox and a new paragraph must be started.
+5. `continue`: A new paragraph is started.
+6. `complete`: Loaded text is done being typed.
+7. `clear`: Text is unloaded and resources are freed.
 
 ## API: Functions
 
@@ -115,6 +117,10 @@ Load raw text to be parsed into formatted gui text nodes. Calls `dtypewriter.cle
 ### dtypewriter.start()
 
 Start typing characters after loading text with `dtypewriter.load()`.
+
+### dtypewriter.restart()
+
+Restart typing characters after calling `dtypewriter.start()`.
 
 ### dtypewriter.continue()
 

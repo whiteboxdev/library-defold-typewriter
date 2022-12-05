@@ -70,6 +70,7 @@ local _callback_handle
 dtypewriter.messages =
 {
 	start = hash("start"),
+	restart = hash("restart"),
 	type = hash("type"),
 	wait = hash("wait"),
 	continue = hash("continue"),
@@ -283,10 +284,27 @@ function dtypewriter.load(text)
 end
 
 function dtypewriter.start()
-	if #_characters > 0 and not _character_index then
+	if dtypewriter.is_loaded() then
 		msg.post(_messages_url, dtypewriter.messages.start)
 		_character_index = 1
 		_paragraph_index = 1
+		_callback_handle = timer.delay(0, false, type_callback)
+	end
+end
+
+function dtypewriter.restart()
+	if dtypewriter.is_typing() or dtypewriter.is_waiting() or dtypewriter.is_complete() then
+		msg.post(_messages_url, dtypewriter.messages.restart)
+		_character_index = 1
+		_paragraph_index = 1
+		_waiting = false
+		if _callback_handle then
+			timer.cancel(_callback_handle)
+		end
+		for character_index = 1, #_characters do
+			local character_data = _characters[character_index]
+			gui.set_color(character_data.node, set_transparent(character_data.color))
+		end
 		_callback_handle = timer.delay(0, false, type_callback)
 	end
 end
@@ -335,7 +353,7 @@ function dtypewriter.is_loaded()
 end
 
 function dtypewriter.is_typing()
-	return _character_index < #_characters
+	return _character_index and _character_index <= #_characters and not _waiting
 end
 
 function dtypewriter.is_waiting()
@@ -343,7 +361,7 @@ function dtypewriter.is_waiting()
 end
 
 function dtypewriter.is_complete()
-	return _character_index == #_characters + 1
+	return _character_index and _character_index == #_characters + 1
 end
 
 return dtypewriter
