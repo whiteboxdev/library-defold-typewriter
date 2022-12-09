@@ -51,6 +51,7 @@ local _character_index
 local _paragraph_index
 
 local _waiting = false
+local _skip = false
 
 local _colors = {}
 local _default_color = vmath.vector4()
@@ -119,7 +120,7 @@ local function type_callback()
 		if character_data.paragraph < next_character_data.paragraph then
 			msg.post(_messages_url, dtypewriter.messages.wait)
 			_waiting = true
-		elseif next_character_data.speed == 0 then
+		elseif next_character_data.speed == 0 or _skip then
 			goto instant
 		else
 			_callback_handle = timer.delay(1 / next_character_data.speed, false, type_callback)
@@ -321,6 +322,17 @@ function dtypewriter.continue()
 			character_index = character_index + 1
 		end
 		_callback_handle = timer.delay(0, false, type_callback)
+	end
+end
+
+function dtypewriter.skip()
+	if dtypewriter.is_typing() then
+		if _callback_handle then
+			timer.cancel(_callback_handle)
+		end
+		_skip = true
+		type_callback()
+		_skip = false
 	end
 end
 
