@@ -126,6 +126,10 @@ Restart typing characters after calling `dtypewriter.start()`.
 
 Continue onto the next paragraph after the end of a paragraph has been reached.
 
+### dtypewriter.skip()
+
+Skip to the end of the current paragraph if characters are being typed.
+
 ### dtypewriter.add_color(name, color)
 
 Add a custom color in the `<color=[color]>` element. If the color name already exists, it is overwriten.
