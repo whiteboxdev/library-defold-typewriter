@@ -54,7 +54,7 @@ local _waiting = false
 local _skip = false
 
 local _colors = {}
-local _default_color = vmath.vector4()
+local _default_color = vmath.vector4(1, 1, 1, 1)
 
 local _fade_delay = 0
 
