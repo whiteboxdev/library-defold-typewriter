@@ -102,9 +102,13 @@ Initialize dtypewriter. If dtypewriter was already initialized, call `dtypewrite
 7. `line_offset`: Number of spacing pixels between lines.
 8. `message_url`: URL to where [dtypewriter messages](https://github.com/klaytonkowalski/library-defold-typewriter#dtypewritermessages) are sent.
 
+---
+
 ### dtypewriter.clear()
 
 Clear internal tracking variables and free dynamically allocated resources. This function should be called when text is no longer desired on screen, likely after `dtypewriter.messages.complete` is received in the `on_message()` function.
+
+---
 
 ### dtypewriter.load(text)
 
@@ -114,30 +118,42 @@ Load raw text to be parsed into formatted gui text nodes. Calls `dtypewriter.cle
 
 1. `text`: Raw text. See the [Configuration](https://github.com/klaytonkowalski/library-defold-typewriter#configuration) section for information on how to insert styling elements.
 
+---
+
 ### dtypewriter.start()
 
 Start typing characters after loading text with `dtypewriter.load()`.
+
+---
 
 ### dtypewriter.restart()
 
 Restart typing characters after calling `dtypewriter.start()`.
 
+---
+
 ### dtypewriter.continue()
 
 Continue onto the next paragraph after the end of a paragraph has been reached.
+
+---
 
 ### dtypewriter.skip()
 
 Skip to the end of the current paragraph if characters are being typed.
 
+---
+
 ### dtypewriter.add_color(name, color)
 
-Add a custom color in the `<color=[color]>` element. If the color name already exists, it is overwriten.
+Add a custom color in the `<color=[color]>` element. If the color name already exists, it is overwritten.
 
 #### Parameters
 
 1. `name`: Name of the color.
 2. `color`: The color itself `vector4`.
+
+---
 
 ### dtypewriter.set_default_color(color)
 
@@ -147,9 +163,13 @@ Set a default color or in the `<color=default>` element.
 
 1. `color`: The color itself `vector4`.
 
+---
+
 ### dtypewriter.clear_colors()
 
 Clear all custom colors, excluding the default color.
+
+---
 
 ### dtypewriter.set_fade_delay(delay)
 
@@ -159,6 +179,8 @@ Set the amount of time it takes for the alpha of an individual character to chan
 
 1. `delay`: Amount of seconds for a character to become completely opaque.
 
+---
+
 ### dtypewriter.set_default_type_speed(speed)
 
 Set the default type speed in characters per second in the `<speed=default>` element.
@@ -166,6 +188,8 @@ Set the default type speed in characters per second in the `<speed=default>` ele
 #### Parameters
 
 1. `speed`: Type speed in characters per second.
+
+---
 
 ### dtypewriter.is_clear()
 
@@ -175,6 +199,8 @@ Check if no text is loaded.
 
 Returns `bool`.
 
+---
+
 ### dtypewriter.is_loaded()
 
 Check if text is loaded with `dtypewriter.load()`.
@@ -182,6 +208,8 @@ Check if text is loaded with `dtypewriter.load()`.
 #### Returns
 
 Returns `bool`.
+
+---
 
 ### dtypewriter.is_typing()
 
@@ -191,6 +219,8 @@ Check if dtypewriter is actively typing.
 
 Returns `bool`.
 
+---
+
 ### dtypewriter.is_waiting()
 
 Check if the end of a paragraph has been reached and dtypewriter is waiting to move onto the next paragraph with `dtypewriter.continue()`.
@@ -198,6 +228,8 @@ Check if the end of a paragraph has been reached and dtypewriter is waiting to m
 #### Returns
 
 Returns `bool`.
+
+---
 
 ### dtypewriter.is_complete()
 
