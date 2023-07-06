@@ -2,11 +2,11 @@
 
 Defold Typewriter provides text scrolling and styling in a Defold game engine project.
 
-Visit my [Giphy](https://giphy.com/gifs/defold-0KrcP9rAA5DOlsgf1J) to see an animated gif of this extension working in a larger project.
-
 Please click the ☆ button on GitHub if this repository is useful or interesting. Thank you!
 
 ![alt text](https://github.com/klaytonkowalski/library-defold-typewriter/blob/main/assets/thumbnail.png?raw=true)
+
+![alt text](https://github.com/klaytonkowalski/library-defold-typewriter/blob/main/assets/example.gif?raw=true)
 
 ## Installation
 
@@ -44,7 +44,7 @@ Text input must be parsed and loaded with `dtypewriter.load()` before being disp
 | color     | Set color of next characters.                          | "default", string                     | \<color=default>, \<color=green>                   |
 | speed     | Set speed of next characters in characters per second. | "default", "instant", positive number | \<speed=default>, \<speed=instant>, \<speed=30>    |
 
-The [example gif](https://giphy.com/gifs/defold-0KrcP9rAA5DOlsgf1J) was created by passing the following string into `dtypewriter.load()`:
+The example animation was created by passing the following string into `dtypewriter.load()`:
 
 ```
 "Just like the classic RPG dialog systems, <color=green>dtypewriter<color=default> is a fantastic dialog solution!<paragraph>It can do all kinds of neat things, like <color=green>colors<color=default>, <speed=3>speeds<speed=default>, and <speed=instant>instant text display<speed=default>, among other things!"
