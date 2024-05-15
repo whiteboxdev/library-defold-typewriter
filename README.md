@@ -4,14 +4,14 @@ Defold Typewriter provides text scrolling and styling in a Defold game engine pr
 
 Please click the ☆ button on GitHub if this repository is useful or interesting. Thank you!
 
-![alt text](https://github.com/klaytonkowalski/library-defold-typewriter/blob/main/assets/thumbnail.png?raw=true)
+![alt text](https://github.com/whiteboxdev/library-defold-typewriter/blob/main/assets/thumbnail.png?raw=true)
 
-![alt text](https://github.com/klaytonkowalski/library-defold-typewriter/blob/main/assets/example.gif?raw=true)
+![alt text](https://github.com/whiteboxdev/library-defold-typewriter/blob/main/assets/example.gif?raw=true)
 
 ## Installation
 
 Add the latest version to your project's dependencies:  
-https://github.com/klaytonkowalski/library-defold-colors/archive/main.zip
+https://github.com/whiteboxdev/library-defold-colors/archive/main.zip
 
 ## Configuration
 
@@ -23,7 +23,7 @@ local dtypewriter = require "dtypewriter.dtypewriter"
 
 Initialize dtypewriter with `dtypewriter.init()`. This function requires several metrics to properly align text content inside a textbox. The following image outlines what each parameter refers to:
 
-![alt text](https://github.com/klaytonkowalski/library-defold-typewriter/blob/main/assets/metrics.png?raw=true)
+![alt text](https://github.com/whiteboxdev/library-defold-typewriter/blob/main/assets/metrics.png?raw=true)
 
 The more interesting parameters are outlined here:
 
@@ -53,7 +53,7 @@ Instead of changing the alpha of each character from 0 to 255 instantly, a smoot
 
 When a new paragraph is needed to continue displaying characters within the predefined textbox, characters will stop being typed and dtypewriter will wait until `dtypewriter.continue()` is called.
 
-The programmer will receive a message in their `on_message()` function on significant state changes, such as waiting for a new paragraph or typing a character. See the [API: Properties](https://github.com/klaytonkowalski/library-defold-typewriter#dtypewritermessages) section for more information.
+The programmer will receive a message in their `on_message()` function on significant state changes, such as waiting for a new paragraph or typing a character. See the [API: Properties](https://github.com/whiteboxdev/library-defold-typewriter#dtypewritermessages) section for more information.
 
 Once the loaded text is done being typed, the programmer should call `dtypewriter.clear()` to clear internal tracking variables and free dynamically allocated resources.
 
@@ -99,7 +99,7 @@ Initialize dtypewriter. If dtypewriter was already initialized, call `dtypewrite
 5. `text_area_width`: Total width of text content.
 6. `line_count_max`: Number of lines before starting a new paragraph.
 7. `line_offset`: Number of spacing pixels between lines.
-8. `message_url`: URL to where [dtypewriter messages](https://github.com/klaytonkowalski/library-defold-typewriter#dtypewritermessages) are sent.
+8. `message_url`: URL to where [dtypewriter messages](https://github.com/whiteboxdev/library-defold-typewriter#dtypewritermessages) are sent.
 
 ---
 
@@ -115,7 +115,7 @@ Load raw text to be parsed into formatted gui text nodes. Calls `dtypewriter.cle
 
 #### Parameters
 
-1. `text`: Raw text. See the [Configuration](https://github.com/klaytonkowalski/library-defold-typewriter#configuration) section for information on how to insert styling elements.
+1. `text`: Raw text. See the [Configuration](https://github.com/whiteboxdev/library-defold-typewriter#configuration) section for information on how to insert styling elements.
 
 ---
 
