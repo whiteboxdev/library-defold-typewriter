@@ -6,12 +6,10 @@ Please click the ☆ button on GitHub if this repository is useful or interestin
 
 ![alt text](https://github.com/whiteboxdev/library-defold-typewriter/blob/main/assets/thumbnail.png?raw=true)
 
-![alt text](https://github.com/whiteboxdev/library-defold-typewriter/blob/main/assets/example.gif?raw=true)
-
 ## Installation
 
 Add the latest version to your project's dependencies:  
-https://github.com/whiteboxdev/library-defold-colors/archive/main.zip
+https://github.com/whiteboxdev/library-defold-typewriter/archive/main.zip
 
 ## Configuration
 
